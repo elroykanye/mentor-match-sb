@@ -14,7 +14,7 @@
     <name>mentor-match-sb</name>
     <description>mentor-match-sb</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>1.8</java.version>
     </properties>
     <dependencies>
         <dependency>
