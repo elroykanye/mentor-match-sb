@@ -1,4 +1,4 @@
-package com.kanyelings.telmah.mentormatchsb.service.inpl;
+package com.kanyelings.telmah.mentormatchsb.service.impl;
 
 import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
 import com.kanyelings.telmah.mentormatchsb.repository.MentorRepository;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class MentorServiceInpl implements MentorService {
+public class MentorServiceImpl implements MentorService {
 
     private final MentorRepository mentorRepository;
 
