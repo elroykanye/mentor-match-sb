@@ -1,19 +1,13 @@
 package com.kanyelings.telmah.mentormatchsb.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
-@Data @Builder
+@Getter @Setter @Builder
 public class MenteeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +21,9 @@ public class MenteeEntity {
 
     @JsonProperty(value = "phoneNumber")
     private String phoneNumber;
+
+    @JsonProperty(value = "department")
+    private String department;
 
     @JsonProperty(value = "gender")
     private String gender;
