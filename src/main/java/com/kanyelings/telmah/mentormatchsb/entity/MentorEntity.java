@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder
+@Getter @Setter @Builder @ToString
 public class MentorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

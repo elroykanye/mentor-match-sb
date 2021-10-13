@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class Match {
+public class MatchEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long matchId;
