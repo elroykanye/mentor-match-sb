@@ -5,6 +5,7 @@ import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
 import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
 import com.kanyelings.telmah.mentormatchsb.model.Constants;
 import com.kanyelings.telmah.mentormatchsb.model.MatchCombo;
+import com.kanyelings.telmah.mentormatchsb.model.MatchComboV2;
 import com.kanyelings.telmah.mentormatchsb.model.MatchSize;
 import com.kanyelings.telmah.mentormatchsb.repository.MatchRepository;
 import com.kanyelings.telmah.mentormatchsb.repository.MenteeRepository;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -99,7 +99,7 @@ public class MatchServiceImpl implements MatchService {
 
     private Map<MentorEntity, List<MenteeEntity>> shuffleHelperV2(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
         // build the default mentor
-        MentorEntity defaultElroy = Constants.DEFAULT_MENTOR;
+        MentorEntity defaultElroy = Constants.DEFAULT_MENTOR_COME;
 
         // create an empty hashmap for the matches
         Map<MentorEntity, List<MenteeEntity>> matches = new HashMap<>();
@@ -112,23 +112,40 @@ public class MatchServiceImpl implements MatchService {
         matches.put(defaultElroy, new ArrayList<>(0));
 
         // create a sorted matches hashmap in an atomic reference and assign the sortMatches() result to it
-        AtomicReference<Map<MentorEntity, List<MenteeEntity>>> sortedMatches = new AtomicReference<>(sortMatches(matches));
+        AtomicReference<List<MatchComboV2>> sortedMatchCombos = new AtomicReference<>();
+        AtomicReference<Map<MentorEntity, List<MenteeEntity>>> sortedMatches = new AtomicReference<>();
+        sortedMatches.set(matches);
+
 
         mentees.forEach(
                 menteeEntity -> {
-                    sortedMatches.set(sortMatches(sortedMatches.get()));
-
+                    sortedMatchCombos.set(sortMatches(sortedMatches.get()));
+                    mapMatchComboToMatchesMap(sortedMatchCombos.get(), sortedMatches.get());
+                    // sortedMatches.set(sortMatches(sortedMatches.get()));
+                    /*
                     List<MentorEntity> qualMentors = sortedMatches.get()
                             .keySet()
                             .stream()
                             .filter(mentorEntity -> mentorEntity.getDepartment().equals(menteeEntity.getDepartment()) &&
                                     mentorEntity.getGender().equals(menteeEntity.getGender()))
                             .collect(Collectors.toList());
+                     */
+
+                    List<MentorEntity> qualMentors = new ArrayList<>();
+                    sortedMatchCombos.get()
+                            .stream()
+                            .filter(matchComboV2 -> {
+                                MentorEntity mentorEntity = matchComboV2.getMentor();
+                                return mentorEntity.getDepartment().equals(menteeEntity.getDepartment()) &&
+                                        mentorEntity.getGender().equals(menteeEntity.getGender());
+                            })
+                            .forEach(matchComboV2 -> qualMentors.add(matchComboV2.getMentor()));
+
 
                     MentorEntity[] qm = qualMentors.toArray(new MentorEntity[0]);
                     // TODO explain this
                     sortedMatches.get().get(
-                            qm.length < 1 ? Constants.DEFAULT_MENTOR : qm[0]
+                            qm.length < 1 ? Constants.DEFAULT_MENTOR_COME : qm[0]
                     ).add(menteeEntity);
                 }
         );
@@ -137,7 +154,13 @@ public class MatchServiceImpl implements MatchService {
         return sortedMatches.get();
     }
 
-    private Map<MentorEntity, List<MenteeEntity>> sortMatches(Map<MentorEntity, List<MenteeEntity>> matches) {
+    private void mapMatchComboToMatchesMap(List<MatchComboV2> matchComboV2s, Map<MentorEntity, List<MenteeEntity>> mentorEntityListMap) {
+        matchComboV2s.forEach(
+                matchComboV2 -> mentorEntityListMap.put(matchComboV2.getMentor(), matchComboV2.getMentees())
+        );
+    }
+
+    private List<MatchComboV2> sortMatches(Map<MentorEntity, List<MenteeEntity>> matches) {
         Map<MentorEntity, Integer> matchSizes = new HashMap<>();
         matches.forEach((mentorEntity, menteeEntities) -> matchSizes.put(mentorEntity, menteeEntities.size()));
 
@@ -149,8 +172,26 @@ public class MatchServiceImpl implements MatchService {
                 matchSize -> sortedMatches.put(matchSize.getMentor(), matches.get(matchSize.getMentor()))
         );
 
+        List<MatchComboV2> matchCombinations = new ArrayList<>();
+        sortedMatchSizes.forEach(
+                matchSize -> matchCombinations.add(
+                        MatchComboV2.builder()
+                        .mentor(matchSize.getMentor())
+                        .mentees(matches.get(matchSize.getMentor()))
+                        .build()
+                )
+        );
 
-        return sortedMatches;
+
+
+        System.out.println("Sorted\n\n");
+        sortedMatches.forEach(
+                (mentorEntity, menteeEntities) -> System.out.println(mentorEntity + " : " + menteeEntities.size())
+        );
+        System.out.println("\n\nSorted\n\n");
+
+
+        return matchCombinations;
     }
 
     private List<MatchSize> sortMatchSizes(Map<MentorEntity, Integer> matchSizes) {
@@ -173,6 +214,14 @@ public class MatchServiceImpl implements MatchService {
             }
         }
 
+        /*
+        System.out.println("Sorted\n\n");
+        List.of(matchSizesArray).forEach(
+                matchSize -> System.out.println(matchSize.getMentor() + " : " + matchSize.getSize())
+        );
+        System.out.println("\n\nSorted\n\n");
+
+         */
         // matchSizeList.sort((o2, o1) -> o1.getSize().compareTo(o2.getSize()));
 
         return List.of(matchSizesArray);
