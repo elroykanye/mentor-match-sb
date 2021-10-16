@@ -12,7 +12,7 @@ i=0
 while read c; do
     if [ $i -le 200 ]; then
         git add $c;
-        git commit -m "complete matching algorithm: modified $c";
+        git commit -m "fixed the shuffling algorithm: modified $c";
     fi
     if [ $i -gt 80 ]; then
         echo $c >> new-commit-list.txt
