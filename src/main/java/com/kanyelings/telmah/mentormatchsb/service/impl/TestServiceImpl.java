@@ -68,7 +68,7 @@ public class TestServiceImpl implements TestService {
         matchEntities.forEach(
                 match -> {
                     Optional<MentorEntity> mentorOption = mentorRepository.findById(match.getMentorId());
-                    MentorEntity mentor = mentorOption.orElse(Constants.DEFAULT_MENTOR);
+                    MentorEntity mentor = mentorOption.orElse(Constants.DEFAULT_MENTOR_COME);
 
                     MenteeEntity mentee = menteeRepository.findById(match.getMenteeId()).orElseThrow();
 
