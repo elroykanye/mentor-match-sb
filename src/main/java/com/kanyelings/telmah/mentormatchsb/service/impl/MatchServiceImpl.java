@@ -28,13 +28,16 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public ResponseEntity<String> shuffleMatches() {
+        // response entity message
         String message = "Shuffle successful";
         HttpStatus status = HttpStatus.OK;
 
         if ( !matchRepository.findAll().isEmpty() ) {
+            // if matches already exist, all should be deleted
             matchRepository.deleteAll();
         }
 
+        // get a list of all mentors and mentees
         List<MenteeEntity> mentees = menteeRepository.findAll();
         List<MentorEntity> mentors = mentorRepository.findAll();
 
@@ -47,25 +50,28 @@ public class MatchServiceImpl implements MatchService {
                         .build()
         ));
          */
+        
+        // create a combo match map for mentor to mentee(s) using the shuffle helper v2
         Map<MentorEntity, List<MenteeEntity>> combMatches = shuffleHelperV2(mentors, mentees);
 
+        // loop through the combo matches via list.forEach()
         combMatches.forEach(
                 (mentorEntity, menteeEntities) -> {
-                    System.out.println("Saving info for : " + mentorEntity.getFirstName());
-                    System.out.println(combMatches.get(mentorEntity).size());
+                    // for the current mentor, create a match entity and persist
                     menteeEntities.forEach(menteeEntity -> {
                         MatchEntity matchEntity = MatchEntity.builder()
                                 .mentorId(mentorEntity.getMentorId())
                                 .menteeId(menteeEntity.getMenteeId())
-                                .build();
-                        System.out.println(mentorEntity.getMentorId() + " : " + menteeEntity.getMenteeId());
-                        matchRepository.save(matchEntity);
+                                .build(); // builder for the match entity object
+                        
+                        matchRepository.save(matchEntity); // save the created match entity
                     });
                 }
         );
         return new ResponseEntity<>(message, status);
     }
 
+    // obsolete shuffle helper -  do not deleted
     private List<MatchCombo> shuffleHelper(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
 
         List<MatchCombo> combos = new ArrayList<>();
@@ -97,6 +103,9 @@ public class MatchServiceImpl implements MatchService {
         return combos;
     }
 
+    /**
+    * @author Elroy Kanye
+    */
     private Map<MentorEntity, List<MenteeEntity>> shuffleHelperV2(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
         // build the default mentor
         MentorEntity defaultElroy = Constants.DEFAULT_MENTOR_COME;
@@ -104,8 +113,7 @@ public class MatchServiceImpl implements MatchService {
         // create an empty hashmap for the matches
         Map<MentorEntity, List<MenteeEntity>> matches = new HashMap<>();
 
-        // loop through the mentors list and place each mentor object as a key in
-        // the matches hashmap
+        // loop through the mentors list and place each mentor object as a key in the matches hashmap
         mentors.forEach(mentorEntity -> matches.put(mentorEntity, new ArrayList<>(0)));
 
         // add the default mentor in the matches hashmap
@@ -114,39 +122,47 @@ public class MatchServiceImpl implements MatchService {
         // create a sorted matches hashmap in an atomic reference and assign the sortMatches() result to it
         AtomicReference<List<MatchComboV2>> sortedMatchCombos = new AtomicReference<>();
         AtomicReference<Map<MentorEntity, List<MenteeEntity>>> sortedMatches = new AtomicReference<>();
+        
+        // set the sortedMatches to originally be all matches existing
         sortedMatches.set(matches);
 
 
         mentees.forEach(
+            // loop through the mentees list
                 menteeEntity -> {
+                    // call the sort matches function to work on the sortedMatches map
+                    // the map is converted into a list of MatchComboV2 objects
                     sortedMatchCombos.set(sortMatches(sortedMatches.get()));
+                    
+                    // map the list of MatchComboV2 objects to a map of Mentor to MenteeList objects
                     mapMatchComboToMatchesMap(sortedMatchCombos.get(), sortedMatches.get());
+                    
                     // sortedMatches.set(sortMatches(sortedMatches.get()));
-                    /*
-                    List<MentorEntity> qualMentors = sortedMatches.get()
-                            .keySet()
-                            .stream()
-                            .filter(mentorEntity -> mentorEntity.getDepartment().equals(menteeEntity.getDepartment()) &&
-                                    mentorEntity.getGender().equals(menteeEntity.getGender()))
-                            .collect(Collectors.toList());
-                     */
 
+                    // create an empty list of qualified mentors for the current mentee object
                     List<MentorEntity> qualMentors = new ArrayList<>();
+                    
+                    // stream (haha) through the sortedMatchesCombos list to find the most appropriate mentor
                     sortedMatchCombos.get()
                             .stream()
                             .filter(matchComboV2 -> {
+                                // filtering process for the mentor and mentee match
                                 MentorEntity mentorEntity = matchComboV2.getMentor();
                                 return mentorEntity.getDepartment().equals(menteeEntity.getDepartment()) &&
                                         mentorEntity.getGender().equals(menteeEntity.getGender());
-                            })
+                            }) // use the forEach to add the found mentors to the qualified list
                             .forEach(matchComboV2 -> qualMentors.add(matchComboV2.getMentor()));
 
 
+                    // convert the qualMentors list to an array of mentor entities
                     MentorEntity[] qm = qualMentors.toArray(new MentorEntity[0]);
                     // TODO explain this
+                    // get the list of mentees from the sorted matches for the current mentor
+                    // and add the current mentee to it
                     sortedMatches.get().get(
+                        // if qm is less than 1, get the default mentor, else get the first element in qm
                             qm.length < 1 ? Constants.DEFAULT_MENTOR_COME : qm[0]
-                    ).add(menteeEntity);
+                    ).add(menteeEntity); // add the mentee entity
                 }
         );
 
@@ -155,6 +171,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     private void mapMatchComboToMatchesMap(List<MatchComboV2> matchComboV2s, Map<MentorEntity, List<MenteeEntity>> mentorEntityListMap) {
+        // mapper for MathcComboV2 objects to MentorMenteeList map
         matchComboV2s.forEach(
                 matchComboV2 -> mentorEntityListMap.put(matchComboV2.getMentor(), matchComboV2.getMentees())
         );
