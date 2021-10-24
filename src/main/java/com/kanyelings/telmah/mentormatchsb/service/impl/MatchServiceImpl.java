@@ -66,6 +66,11 @@ public class MatchServiceImpl implements MatchService {
         return new ResponseEntity<>(message, status);
     }
 
+    @Override
+    public ResponseEntity<List<MatchEntity>> getAllMatches() {
+        return null;
+    }
+
     private List<MatchCombo> shuffleHelper(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
 
         List<MatchCombo> combos = new ArrayList<>();
@@ -160,6 +165,7 @@ public class MatchServiceImpl implements MatchService {
         );
     }
 
+
     private List<MatchComboV2> sortMatches(Map<MentorEntity, List<MenteeEntity>> matches) {
         Map<MentorEntity, Integer> matchSizes = new HashMap<>();
         matches.forEach((mentorEntity, menteeEntities) -> matchSizes.put(mentorEntity, menteeEntities.size()));
@@ -194,6 +200,11 @@ public class MatchServiceImpl implements MatchService {
         return matchCombinations;
     }
 
+    /**
+     *
+     * @param matchSizes
+     * @return
+     */
     private List<MatchSize> sortMatchSizes(Map<MentorEntity, Integer> matchSizes) {
         List<MatchSize> matchSizeList = new ArrayList<>();
         matchSizes.forEach((mentorEntity, integer) -> matchSizeList.add(
