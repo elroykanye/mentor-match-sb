@@ -1,11 +1,9 @@
-package com.kanyelings.telmah.mentormatchsb.model;
+package com.kanyelings.telmah.mentormatchsb.business.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kanyelings.telmah.mentormatchsb.model.enums.Role;
+import com.kanyelings.telmah.mentormatchsb.business.model.enums.Role;
 import lombok.*;
-
-import javax.persistence.Entity;
 
 @Getter
 @Setter
