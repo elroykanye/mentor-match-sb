@@ -1,23 +1,22 @@
-package com.kanyelings.telmah.mentormatchsb.service.impl;
+package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MatchEntity;
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
-import com.kanyelings.telmah.mentormatchsb.model.Constants;
-import com.kanyelings.telmah.mentormatchsb.model.MatchCombo;
-import com.kanyelings.telmah.mentormatchsb.model.MatchComboV2;
-import com.kanyelings.telmah.mentormatchsb.model.MatchSize;
-import com.kanyelings.telmah.mentormatchsb.repository.MatchRepository;
-import com.kanyelings.telmah.mentormatchsb.repository.MenteeRepository;
-import com.kanyelings.telmah.mentormatchsb.repository.MentorRepository;
-import com.kanyelings.telmah.mentormatchsb.service.MatchService;
+import com.kanyelings.telmah.mentormatchsb.business.model.MatchComboV2;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MatchEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.config.Constants;
+import com.kanyelings.telmah.mentormatchsb.business.model.MatchCombo;
+import com.kanyelings.telmah.mentormatchsb.business.model.MatchSize;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MatchRepository;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
+import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class MatchServiceImpl implements MatchService {
     public ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAllMatches() {
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
-            return new ResponseEntiy(List.of(), HtpStatus.OK);
+            return new ResponseEntity<>(List.of(), HttpStatus.OK);
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
