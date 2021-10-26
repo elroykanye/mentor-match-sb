@@ -1,4 +1,4 @@
-package com.kanyelings.telmah.mentormatchsb.model;
+package com.kanyelings.telmah.mentormatchsb.business.model;
 
 import lombok.*;
 
