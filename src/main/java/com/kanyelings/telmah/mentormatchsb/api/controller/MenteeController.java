@@ -1,28 +1,24 @@
 package com.kanyelings.telmah.mentormatchsb.api.controller;
 
-import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.business.service.MenteeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
 @RequestMapping(value = "/api/mentee")
+@AllArgsConstructor
 public class MenteeController {
     private final MenteeService menteeService;
-    @Autowired
-    public MenteeController(MenteeService menteeService){
-        this.menteeService = menteeService;
-    }
-
 
     @GetMapping(value = "/all")
-    public List<MenteeEntity> getAllMentees(){
+    public List<MenteeDto> getAllMentees(){
         return menteeService.getAllMentees();
     }
 
     @PostMapping(value = "/add")
-    public void addMentee(@RequestBody MenteeEntity newMentee){
+    public void addMentee(@RequestBody MenteeDto newMentee){
         menteeService.addNewMentee(newMentee);
     }
 }
