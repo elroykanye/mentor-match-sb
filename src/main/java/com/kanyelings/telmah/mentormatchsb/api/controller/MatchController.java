@@ -1,9 +1,8 @@
-package com.kanyelings.telmah.mentormatchsb.controller;
+package com.kanyelings.telmah.mentormatchsb.api.controller;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
-import com.kanyelings.telmah.mentormatchsb.model.EntitySearch;
-import com.kanyelings.telmah.mentormatchsb.service.MatchService;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
