@@ -1,5 +1,9 @@
 package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
+import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
+import com.kanyelings.telmah.mentormatchsb.business.mapper.MenteeMapper;
+import com.kanyelings.telmah.mentormatchsb.business.mapper.MentorMapper;
 import com.kanyelings.telmah.mentormatchsb.business.model.MatchComboV2;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MatchEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
@@ -26,6 +30,8 @@ public class MatchServiceImpl implements MatchService {
     private final MatchRepository matchRepository;
     private final MentorRepository mentorRepository;
     private final MenteeRepository menteeRepository;
+    private final MentorMapper mentorMapper;
+    private final MenteeMapper menteeMapper;
 
     @Override
     public ResponseEntity<String> shuffleMatches() {
@@ -39,7 +45,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAllMatches() {
+    public ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAllMatches() {
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
             return new ResponseEntity<>(List.of(), HttpStatus.OK);
@@ -58,7 +64,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<MenteeEntity>> getAllMenteesByMentorId(Long mentorId) {
+    public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId) {
         return matchRepository.findAllByMentorId(mentorId).isEmpty() ?
                 new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND):
                 new ResponseEntity<>(
@@ -66,6 +72,7 @@ public class MatchServiceImpl implements MatchService {
                                 .stream()
                                 .map(MatchEntity::getMenteeId)
                                 .map(this::mapMenteeIdToMenteeEntity)
+                                .map(menteeMapper::mapMenteeEntityToDto)
                                 .collect(Collectors.toList()),
                         HttpStatus.FOUND
                 );
@@ -84,17 +91,24 @@ public class MatchServiceImpl implements MatchService {
         );
         return mentor.get() == null ?
                 new ResponseEntity<>("Mentor does not exists", HttpStatus.NOT_FOUND):
-                new ResponseEntity<>(mentor.get(), HttpStatus.FOUND);
+                new ResponseEntity<>(
+                        mentorMapper.mapMentorEntityToDto(mentor.get()),
+                        HttpStatus.FOUND
+                );
     }
 
     private MenteeEntity mapMenteeIdToMenteeEntity(Long menteeId) {
         return menteeRepository.findById(menteeId).orElseThrow();
     }
 
-    private Map<MentorEntity, MenteeEntity> mapMatchToMentorMenteesMap(MatchEntity matchEntity) {
+    private Map<MentorDto, MenteeDto> mapMatchToMentorMenteesMap(MatchEntity matchEntity) {
         return Map.of(
-                mentorRepository.getById(matchEntity.getMentorId()),
-                menteeRepository.getById(matchEntity.getMenteeId())
+                mentorMapper.mapMentorEntityToDto(
+                        mentorRepository.getById(matchEntity.getMentorId())
+                ),
+                menteeMapper.mapMenteeEntityToDto(
+                        menteeRepository.getById(matchEntity.getMenteeId())
+                )
         );
     }
 
@@ -176,7 +190,7 @@ public class MatchServiceImpl implements MatchService {
         // add the default mentor in the matches hashmap
         matches.put(defaultElroy, new ArrayList<>(0));
 
-        // create a sorted matches hashmap in an atomic reference and assign the sortMatches() result to it
+        // create a sorted matches' hashmap in an atomic reference and assign the sortMatches() result to it
         AtomicReference<List<MatchComboV2>> sortedMatchCombos = new AtomicReference<>();
         AtomicReference<Map<MentorEntity, List<MenteeEntity>>> sortedMatches = new AtomicReference<>();
         
@@ -287,16 +301,6 @@ public class MatchServiceImpl implements MatchService {
                 }
             }
         }
-
-        /*
-        System.out.println("Sorted\n\n");
-        List.of(matchSizesArray).forEach(
-                matchSize -> System.out.println(matchSize.getMentor() + " : " + matchSize.getSize())
-        );
-        System.out.println("\n\nSorted\n\n");
-
-         */
-        // matchSizeList.sort((o2, o1) -> o1.getSize().compareTo(o2.getSize()));
 
         return List.of(matchSizesArray);
     }
