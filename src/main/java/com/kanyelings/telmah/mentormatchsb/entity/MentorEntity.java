@@ -22,6 +22,9 @@ public class MentorEntity {
     @JsonProperty(value = "phone_number")
     private String phoneNumber;
 
+    @JsonProperty(value = "waNumber")
+    private String waNumber;
+
     @JsonProperty(value = "department")
     private String department;
 

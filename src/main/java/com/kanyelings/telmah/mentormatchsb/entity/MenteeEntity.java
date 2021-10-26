@@ -22,6 +22,9 @@ public class MenteeEntity {
     @JsonProperty(value = "phoneNumber")
     private String phoneNumber;
 
+    @JsonProperty(value = "waNumber")
+    private String waNumber;
+
     @JsonProperty(value = "department")
     private String department;
 
