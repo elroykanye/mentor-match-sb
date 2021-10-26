@@ -1,10 +1,10 @@
-package com.kanyelings.telmah.mentormatchsb.service.impl;
+package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
-import com.kanyelings.telmah.mentormatchsb.model.EntitySearch;
-import com.kanyelings.telmah.mentormatchsb.model.enums.Role;
-import com.kanyelings.telmah.mentormatchsb.repository.MenteeRepository;
-import com.kanyelings.telmah.mentormatchsb.repository.MentorRepository;
-import com.kanyelings.telmah.mentormatchsb.service.SearchService;
+import com.kanyelings.telmah.mentormatchsb.business.model.EntitySearch;
+import com.kanyelings.telmah.mentormatchsb.business.model.enums.Role;
+import com.kanyelings.telmah.mentormatchsb.business.service.SearchService;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
