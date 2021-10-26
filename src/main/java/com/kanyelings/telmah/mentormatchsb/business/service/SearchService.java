@@ -1,6 +1,6 @@
-package com.kanyelings.telmah.mentormatchsb.service;
+package com.kanyelings.telmah.mentormatchsb.business.service;
 
-import com.kanyelings.telmah.mentormatchsb.model.EntitySearch;
+import com.kanyelings.telmah.mentormatchsb.business.model.EntitySearch;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
