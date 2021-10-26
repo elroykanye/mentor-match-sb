@@ -1,8 +1,8 @@
-package com.kanyelings.telmah.mentormatchsb.service.impl;
+package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.repository.MenteeRepository;
-import com.kanyelings.telmah.mentormatchsb.service.MenteeService;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
+import com.kanyelings.telmah.mentormatchsb.business.service.MenteeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
