@@ -17,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +34,70 @@ public class MatchServiceImpl implements MatchService {
         String message = "Shuffle successful";
         HttpStatus status = HttpStatus.OK;
 
+        shuffleMatchesHelper();
+
+        return new ResponseEntity<>(message, status);
+    }
+
+    @Override
+    public ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAllMatches() {
+        shuffleMatchesHelper();
+
+        return matchRepository.findAll().isEmpty() ?
+                new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND):
+                new ResponseEntity<>(
+                        matchRepository.findAll()
+                                .stream()
+                                .map(this::mapMatchToMentorMenteesMap)
+                                .collect(Collectors.toList())
+                        , HttpStatus.FOUND
+                );
+
+    }
+
+    @Override
+    public ResponseEntity<List<MenteeEntity>> getAllMenteesByMentorId(Long mentorId) {
+        return matchRepository.findAllByMentorId(mentorId).isEmpty() ?
+                new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND):
+                new ResponseEntity<>(
+                        matchRepository.findAllByMentorId(mentorId)
+                                .stream()
+                                .map(MatchEntity::getMenteeId)
+                                .map(this::mapMenteeIdToMenteeEntity)
+                                .collect(Collectors.toList()),
+                        HttpStatus.FOUND
+                );
+    }
+
+    @Override
+    public ResponseEntity<?> getMentorByMenteeId(Long menteeId) {
+        AtomicReference<MentorEntity> mentor = new AtomicReference<>();
+
+        matchRepository.findByMenteeId(menteeId).ifPresentOrElse(
+                matchEntity -> mentorRepository.findById(matchEntity.getMentorId()).ifPresentOrElse(
+                        mentor::set,
+                        () -> {}
+                ),
+                () -> {}
+        );
+        return mentor.get() == null ?
+                new ResponseEntity<>("Mentor does not exists", HttpStatus.NOT_FOUND):
+                new ResponseEntity<>(mentor.get(), HttpStatus.FOUND);
+    }
+
+    private MenteeEntity mapMenteeIdToMenteeEntity(Long menteeId) {
+        return menteeRepository.findById(menteeId).orElseThrow();
+    }
+
+    private Map<MentorEntity, MenteeEntity> mapMatchToMentorMenteesMap(MatchEntity matchEntity) {
+        return Map.of(
+                mentorRepository.getById(matchEntity.getMentorId()),
+                menteeRepository.getById(matchEntity.getMenteeId())
+        );
+    }
+
+    private void shuffleMatchesHelper() {
+
         if ( !matchRepository.findAll().isEmpty() ) {
             // if matches already exist, all should be deleted
             matchRepository.deleteAll();
@@ -41,16 +107,6 @@ public class MatchServiceImpl implements MatchService {
         List<MenteeEntity> mentees = menteeRepository.findAll();
         List<MentorEntity> mentors = mentorRepository.findAll();
 
-        // List<MatchCombo> matchCombos = shuffleHelper(mentors, mentees);
-        /*
-        matchCombos.forEach(matchCombo -> matchRepository.save(
-                MatchEntity.builder()
-                        .menteeId(matchCombo.getMenteeId())
-                        .mentorId(matchCombo.getMentorId())
-                        .build()
-        ));
-         */
-        
         // create a combo match map for mentor to mentee(s) using the shuffle helper v2
         Map<MentorEntity, List<MenteeEntity>> combMatches = shuffleHelperV2(mentors, mentees);
 
@@ -63,12 +119,11 @@ public class MatchServiceImpl implements MatchService {
                                 .mentorId(mentorEntity.getMentorId())
                                 .menteeId(menteeEntity.getMenteeId())
                                 .build(); // builder for the match entity object
-                        
+
                         matchRepository.save(matchEntity); // save the created match entity
                     });
                 }
         );
-        return new ResponseEntity<>(message, status);
     }
 
     // obsolete shuffle helper -  do not deleted
