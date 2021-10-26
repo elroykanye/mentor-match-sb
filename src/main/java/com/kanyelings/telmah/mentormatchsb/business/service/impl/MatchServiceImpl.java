@@ -41,18 +41,21 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAllMatches() {
-        shuffleMatchesHelper();
-
-        return matchRepository.findAll().isEmpty() ?
-                new ResponseEntity<>(List.of(), HttpStatus.NOT_FOUND):
-                new ResponseEntity<>(
-                        matchRepository.findAll()
-                                .stream()
-                                .map(this::mapMatchToMentorMenteesMap)
-                                .collect(Collectors.toList())
-                        , HttpStatus.FOUND
-                );
-
+        if (matchRepository.findAll().isEmpty()) {
+            // case for if the match repository is empty
+            return new ResponseEntiy(List.of(), HtpStatus.OK);
+        } else {
+            // if not is the case that the match repository is empty,
+            // shuffle the matches first
+            shuffleMatchesHelper();
+            return new ResponseEntity<>(
+                    matchRepository.findAll()
+                            .stream()
+                            .map(this::mapMatchToMentorMenteesMap)
+                            .collect(Collectors.toList())
+                    , HttpStatus.FOUND
+            );
+        }
     }
 
     @Override
