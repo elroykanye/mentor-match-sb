@@ -5,9 +5,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ heroku-v1 ]
   pull_request:
-    branches: [ main ]
+    branches: [ heroku-v1 ]
 
 jobs:
   build:
