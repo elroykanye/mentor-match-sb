@@ -1,7 +1,7 @@
-package com.kanyelings.telmah.mentormatchsb.service;
+package com.kanyelings.telmah.mentormatchsb.business.service;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
