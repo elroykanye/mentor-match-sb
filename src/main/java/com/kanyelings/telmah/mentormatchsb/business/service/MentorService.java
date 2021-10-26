@@ -1,11 +1,11 @@
 package com.kanyelings.telmah.mentormatchsb.business.service;
 
-import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 
 import java.util.List;
 
 public interface MentorService {
-    List<MentorEntity> getAllMentors();
+    List<MentorDto> getAllMentors();
 
-    void addNewMentor(MentorEntity newMentor);
+    void addNewMentor(MentorDto newMentor);
 }
