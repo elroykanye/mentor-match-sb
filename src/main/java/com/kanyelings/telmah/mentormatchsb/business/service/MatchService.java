@@ -1,7 +1,7 @@
 package com.kanyelings.telmah.mentormatchsb.business.service;
 
-import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.Map;
 public interface MatchService {
     ResponseEntity<String> shuffleMatches();
 
-    ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAllMatches();
+    ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAllMatches();
 
-    ResponseEntity<List<MenteeEntity>> getAllMenteesByMentorId(Long mentorId);
+    ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId);
 
     ResponseEntity<?> getMentorByMenteeId(Long menteeId);
 }
