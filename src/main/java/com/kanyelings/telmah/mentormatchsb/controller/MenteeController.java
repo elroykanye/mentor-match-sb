@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
-@RequestMapping(value = "/mentee")
+@RequestMapping(value = "/api/mentee")
 public class MenteeController {
     private final MenteeService menteeService;
     @Autowired

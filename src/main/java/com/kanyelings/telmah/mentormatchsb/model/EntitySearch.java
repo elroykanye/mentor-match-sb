@@ -1,17 +1,24 @@
-package com.kanyelings.telmah.mentormatchsb.entity;
+package com.kanyelings.telmah.mentormatchsb.model;
+
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kanyelings.telmah.mentormatchsb.model.enums.Role;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
-@Entity
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder @ToString
-public class MenteeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long menteeId;
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class EntitySearch {
+
+    @JsonProperty(value = "id")
+    private Long id;
+
+    @JsonProperty(value = "role")
+    private Role role;
 
     @JsonProperty(value = "firstName")
     private String firstName;
@@ -21,9 +28,6 @@ public class MenteeEntity {
 
     @JsonProperty(value = "phoneNumber")
     private String phoneNumber;
-
-    @JsonProperty(value = "waNumber")
-    private String waNumber;
 
     @JsonProperty(value = "department")
     private String department;
