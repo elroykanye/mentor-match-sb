@@ -4,7 +4,7 @@ public enum Role {
     MENTEE("mentee"),
     MENTOR("mentor");
 
-    String role;
+    final String role;
 
     Role(String role) {
         this.role = role;
