@@ -1,6 +1,6 @@
-package com.kanyelings.telmah.mentormatchsb.repository;
+package com.kanyelings.telmah.mentormatchsb.data.repository;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
