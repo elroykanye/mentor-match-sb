@@ -1,6 +1,6 @@
-package com.kanyelings.telmah.mentormatchsb.service;
+package com.kanyelings.telmah.mentormatchsb.business.service;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
 
 import java.util.List;
 
