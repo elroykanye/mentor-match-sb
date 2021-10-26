@@ -1,4 +1,4 @@
-package com.kanyelings.telmah.mentormatchsb.business.model;
+package com.kanyelings.telmah.mentormatchsb.config;
 
 import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
 
