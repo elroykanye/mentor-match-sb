@@ -1,7 +1,7 @@
-package com.kanyelings.telmah.mentormatchsb.model;
+package com.kanyelings.telmah.mentormatchsb.business.model;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
 import lombok.*;
 
 import java.util.List;
