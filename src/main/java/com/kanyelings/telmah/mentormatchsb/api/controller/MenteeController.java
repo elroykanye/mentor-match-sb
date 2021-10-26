@@ -1,7 +1,7 @@
-package com.kanyelings.telmah.mentormatchsb.controller;
+package com.kanyelings.telmah.mentormatchsb.api.controller;
 
-import com.kanyelings.telmah.mentormatchsb.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.service.MenteeService;
+import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
+import com.kanyelings.telmah.mentormatchsb.business.service.MenteeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
