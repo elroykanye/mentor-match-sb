@@ -1,4 +1,4 @@
-package com.kanyelings.telmah.mentormatchsb.model.enums;
+package com.kanyelings.telmah.mentormatchsb.business.model.enums;
 
 public enum Role {
     MENTEE("mentee"),
