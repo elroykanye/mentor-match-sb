@@ -1,6 +1,6 @@
-package com.kanyelings.telmah.mentormatchsb.controller;
+package com.kanyelings.telmah.mentormatchsb.api.controller;
 
-import com.kanyelings.telmah.mentormatchsb.service.TestService;
+import com.kanyelings.telmah.mentormatchsb.business.service.TestService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
