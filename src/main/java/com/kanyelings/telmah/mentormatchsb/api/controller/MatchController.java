@@ -1,7 +1,7 @@
 package com.kanyelings.telmah.mentormatchsb.api.controller;
 
-import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
-import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ public class MatchController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Map<MentorEntity, MenteeEntity>>> getAll() {
+    public ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAll() {
         return matchService.getAllMatches();
     }
 
     @GetMapping("/{mentorId}/mentees")
-    public ResponseEntity<List<MenteeEntity>> getAllMenteesByMentorId(@PathVariable("mentorId") Long mentorId) {
+    public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(@PathVariable("mentorId") Long mentorId) {
         return matchService.getAllMenteesByMentorId(mentorId);
     }
 
