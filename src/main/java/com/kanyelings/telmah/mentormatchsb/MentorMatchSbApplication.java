@@ -19,31 +19,4 @@ public class MentorMatchSbApplication {
     public static void main(String[] args) {
         SpringApplication.run(MentorMatchSbApplication.class, args);
     }
-
-    @Bean
-    public Docket mmApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(getApiInfo());
-    }
-
-    private ApiInfo getApiInfo() {
-        return new ApiInfoBuilder()
-                .title("Mentor Match API")
-                .version("1.0.0")
-                .description("API reactive docs for the mentor match services")
-                .contact(
-                        new Contact(
-                                "Elroy Kanye",
-                                "elroykanye.github.io/elroykanye",
-                                "elroykanye@gmail.com"
-                        )
-
-                )
-                .license("Apache License Version 2.0")
-                .build();
-    }
 }
