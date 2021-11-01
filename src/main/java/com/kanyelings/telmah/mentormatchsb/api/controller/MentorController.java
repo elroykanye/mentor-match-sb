@@ -3,6 +3,8 @@ package com.kanyelings.telmah.mentormatchsb.api.controller;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.service.MentorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,13 @@ public class MentorController {
         return mentorService.getAllMentors();
     }
 
-    @PostMapping(value = "/add")
-    public void addMentor(@RequestBody MentorDto newMentor){
-        mentorService.addNewMentor(newMentor);
+    @PostMapping(
+            value = "/add",
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            })
+    public ResponseEntity<String> addMentor(@ModelAttribute MentorDto newMentor){
+        return mentorService.addNewMentor(newMentor);
     }
 }
