@@ -10,6 +10,9 @@ public class MentorDto {
     @JsonProperty("id")
     private Long mentorId;
 
+    @JsonProperty(value = "username")
+    private String username;
+
     @JsonProperty(value = "first_name")
     private String firstName;
 
