@@ -4,17 +4,17 @@ import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MenteeMapper;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MentorMapper;
+import com.kanyelings.telmah.mentormatchsb.business.model.MatchCombo;
 import com.kanyelings.telmah.mentormatchsb.business.model.MatchComboV2;
+import com.kanyelings.telmah.mentormatchsb.business.model.MatchSize;
+import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
+import com.kanyelings.telmah.mentormatchsb.config.Constants;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MatchEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
-import com.kanyelings.telmah.mentormatchsb.config.Constants;
-import com.kanyelings.telmah.mentormatchsb.business.model.MatchCombo;
-import com.kanyelings.telmah.mentormatchsb.business.model.MatchSize;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MatchRepository;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
-import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,23 +45,44 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAllMatches() {
+    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> getAllMatches() {
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
-            return new ResponseEntity<>(List.of(), HttpStatus.OK);
+            return new ResponseEntity<>(Map.of(), HttpStatus.OK);
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
             shuffleMatchesHelper();
+
             return new ResponseEntity<>(
-                    matchRepository.findAll()
-                            .stream()
-                            .map(this::mapMatchToMentorMenteesMap)
-                            .collect(Collectors.toList())
+                    mapMatchListToMentorMenteesMap(
+                            matchRepository.findAll()
+                                    .stream()
+                                    .map(MatchEntity::getMentorId)
+                                    .collect(Collectors.toList())
+                    )
                     , HttpStatus.FOUND
             );
         }
     }
+
+    private Map<MentorDto, List<MenteeDto>> mapMatchListToMentorMenteesMap(List<Long> mentorIds) {
+        Set<Long> uniqueMentorIds = new HashSet<>(mentorIds);
+
+        Map<MentorDto, List<MenteeDto>> matchesMap = new HashMap<>();
+        uniqueMentorIds.forEach(mentorId -> matchesMap.put(
+                mentorMapper.mapMentorEntityToDto(mentorRepository.getById(mentorId)),
+                matchRepository.findAllByMentorId(mentorId)
+                        .stream()
+                        .map(MatchEntity::getMenteeId)
+                        .map(menteeRepository::getById)
+                        .map(menteeMapper::mapMenteeEntityToDto)
+                        .collect(Collectors.toList())
+        ));
+
+        return matchesMap;
+    }
+
 
     @Override
     public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId) {
@@ -101,17 +122,6 @@ public class MatchServiceImpl implements MatchService {
         return menteeRepository.findById(menteeId).orElseThrow();
     }
 
-    private Map<MentorDto, MenteeDto> mapMatchToMentorMenteesMap(MatchEntity matchEntity) {
-        return Map.of(
-                mentorMapper.mapMentorEntityToDto(
-                        mentorRepository.getById(matchEntity.getMentorId())
-                ),
-                menteeMapper.mapMenteeEntityToDto(
-                        menteeRepository.getById(matchEntity.getMenteeId())
-                )
-        );
-    }
-
     private void shuffleMatchesHelper() {
 
         if ( !matchRepository.findAll().isEmpty() ) {
@@ -140,38 +150,6 @@ public class MatchServiceImpl implements MatchService {
                     });
                 }
         );
-    }
-
-    // obsolete shuffle helper -  do not deleted
-    private List<MatchCombo> shuffleHelper(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
-
-        List<MatchCombo> combos = new ArrayList<>();
-
-        mentees.forEach(
-                menteeEntity -> {
-                    Optional<MentorEntity> mentorOptional = mentors.stream()
-                            .filter(
-                                    mentorEntity ->
-                                            Objects.equals(menteeEntity.getGender(), mentorEntity.getGender()) &&
-                                                    Objects.equals(menteeEntity.getDepartment(), mentorEntity.getDepartment())
-                            )
-                            .findFirst();
-                    mentorOptional.ifPresentOrElse(
-                            mentorEntity -> combos.add(
-                                    MatchCombo.builder()
-                                            .menteeId(menteeEntity.getMenteeId())
-                                            .mentorId(mentorEntity.getMentorId())
-                                            .build()
-                            ),
-                            () -> combos.add(MatchCombo.builder()
-                                    .menteeId(menteeEntity.getMenteeId())
-                                    .mentorId(0L)
-                                    .build())
-                    );
-                }
-        );
-
-        return combos;
     }
 
     /**
@@ -225,19 +203,19 @@ public class MatchServiceImpl implements MatchService {
                             .forEach(matchComboV2 -> qualMentors.add(matchComboV2.getMentor()));
 
 
+
+                    if (qualMentors.isEmpty()) {
+                        qualMentors.add(sortedMatchCombos.get().stream().findFirst().orElseThrow().getMentor());
+                    }
+
                     // convert the qualMentors list to an array of mentor entities
                     MentorEntity[] qm = qualMentors.toArray(new MentorEntity[0]);
-                    // TODO explain this
+
                     // get the list of mentees from the sorted matches for the current mentor
                     // and add the current mentee to it
-                    sortedMatches.get().get(
-                        // if qm is less than 1, get the default mentor, else get the first element in qm
-                            qm.length < 1 ? Constants.DEFAULT_MENTOR_COME : qm[0]
-                    ).add(menteeEntity); // add the mentee entity
+                    sortedMatches.get().get(qm[0]).add(menteeEntity); // add the mentee entity
                 }
         );
-
-
         return sortedMatches.get();
     }
 
@@ -304,6 +282,4 @@ public class MatchServiceImpl implements MatchService {
 
         return List.of(matchSizesArray);
     }
-
-
 }

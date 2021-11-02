@@ -3,12 +3,17 @@ package com.kanyelings.telmah.mentormatchsb.data.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kanyelings.telmah.mentormatchsb.data.entity.common.MentorMenteeCommon;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Entity
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder @ToString
+@Getter
+@Setter
+@SuperBuilder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class MentorEntity extends MentorMenteeCommon {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

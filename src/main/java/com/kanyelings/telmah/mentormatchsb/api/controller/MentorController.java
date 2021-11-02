@@ -20,7 +20,7 @@ public class MentorController {
 
 
     @GetMapping(value = "/all")
-    public List<MentorDto> getAllMentors(){
+    public ResponseEntity<List<MentorDto>> getAllMentors(){
         return mentorService.getAllMentors();
     }
 

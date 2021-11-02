@@ -21,11 +21,12 @@ public class MentorServiceImpl implements MentorService {
     private final MentorRepository mentorRepository;
 
     @Override
-    public List<MentorDto> getAllMentors() {
-        return mentorRepository.findAll()
+    public ResponseEntity<List<MentorDto>> getAllMentors() {
+        List<MentorDto> mentors = mentorRepository.findAll()
                 .stream()
                 .map(mentorMapper::mapMentorEntityToDto)
                 .collect(Collectors.toList());
+        return new ResponseEntity<>(mentors, HttpStatus.OK);
     }
 
     @Override
