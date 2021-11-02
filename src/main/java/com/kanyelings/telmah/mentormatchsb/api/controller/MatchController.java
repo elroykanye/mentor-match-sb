@@ -22,7 +22,7 @@ public class MatchController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAll() {
+    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> getAll() {
         return matchService.getAllMatches();
     }
 

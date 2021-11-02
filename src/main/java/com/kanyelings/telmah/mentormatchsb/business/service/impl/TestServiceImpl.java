@@ -1,5 +1,7 @@
 package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
+import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.config.Constants;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import com.kanyelings.telmah.mentormatchsb.business.service.TestService;
@@ -11,9 +13,11 @@ import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -51,7 +55,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void shuffleTest() {
+    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> shuffleTest() {
         setupEntities();
 
         menteeRepository.deleteAll();
@@ -65,17 +69,17 @@ public class TestServiceImpl implements TestService {
         log.info("Retrieving all matches");
         List<MatchEntity> matchEntities = matchRepository.findAll();
 
-        matchEntities.forEach(
-                match -> {
-                    Optional<MentorEntity> mentorOption = mentorRepository.findById(match.getMentorId());
-                    MentorEntity mentor = mentorOption.orElse(Constants.DEFAULT_MENTOR_COME);
+        matchEntities.forEach(match -> {
+            Optional<MentorEntity> mentorOption = mentorRepository.findById(match.getMentorId());
+            MentorEntity mentor = mentorOption.orElse(Constants.DEFAULT_MENTOR_COME);
 
-                    MenteeEntity mentee = menteeRepository.findById(match.getMenteeId()).orElseThrow();
+            MenteeEntity mentee = menteeRepository.findById(match.getMenteeId()).orElseThrow();
 
-                    System.out.println(mentor.getFirstName().concat(mentor.getSecondName())
-                            .concat( ":::::" )
-                            .concat(mentee.getFirstName().concat(mentee.getSecondName())));
-                }
-        );
+            System.out.println(mentor.getFirstName().concat(mentor.getSecondName())
+                    .concat( ":::::" )
+                    .concat(mentee.getFirstName().concat(mentee.getSecondName())));
+        });
+
+        return matchService.getAllMatches();
     }
 }

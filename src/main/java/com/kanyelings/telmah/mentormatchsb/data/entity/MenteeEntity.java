@@ -1,28 +1,23 @@
 package com.kanyelings.telmah.mentormatchsb.data.entity;
 
+import com.kanyelings.telmah.mentormatchsb.data.entity.common.MentorMenteeCommon;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Entity
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder @ToString
-public class MenteeEntity {
+@Getter
+@Setter
+@SuperBuilder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class MenteeEntity extends MentorMenteeCommon {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long menteeId;
 
-    private String firstName;
-
-    private String secondName;
-
-    private String phoneNumber;
-
-    private String waNumber;
-
-    private String department;
-
-    private String gender;
 
     private String previousSchool;
 }

@@ -1,11 +1,13 @@
 package com.kanyelings.telmah.mentormatchsb.business.service;
 
 import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface MenteeService {
-    List<MenteeDto> getAllMentees();
+    ResponseEntity<List<MenteeDto>> getAllMentees();
 
-    void addNewMentee(MenteeDto newMentee);
+    ResponseEntity<String> addNewMentee(MenteeDto newMentee, MultipartFile imageFile);
 }
