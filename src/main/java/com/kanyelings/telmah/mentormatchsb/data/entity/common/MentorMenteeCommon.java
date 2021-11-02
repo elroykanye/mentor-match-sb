@@ -1,15 +1,17 @@
 package com.kanyelings.telmah.mentormatchsb.data.entity.common;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
-import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
 public abstract class MentorMenteeCommon implements Serializable {
     @Column(length = 32, nullable = false, unique = true)
