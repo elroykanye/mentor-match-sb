@@ -10,7 +10,7 @@ import java.util.Map;
 public interface MatchService {
     ResponseEntity<String> shuffleMatches();
 
-    ResponseEntity<List<Map<MentorDto, MenteeDto>>> getAllMatches();
+    ResponseEntity<Map<MentorDto, List<MenteeDto>>> getAllMatches();
 
     ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId);
 
