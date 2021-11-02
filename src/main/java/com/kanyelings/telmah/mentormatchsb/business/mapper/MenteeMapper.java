@@ -8,9 +8,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", implementationPackage = "<PACKAGE_NAME>.impl")
 public interface MenteeMapper {
+    @Mapping(target = "image", ignore = true)
     MenteeDto mapMenteeEntityToDto(MenteeEntity menteeEntity);
 
     @InheritInverseConfiguration
     @Mapping(target = "menteeId", ignore = true)
+    @Mapping(target = "imagePath", ignore = true)
     MenteeEntity mapDtoToMentorEntity(MenteeDto menteeDto);
+
 }
