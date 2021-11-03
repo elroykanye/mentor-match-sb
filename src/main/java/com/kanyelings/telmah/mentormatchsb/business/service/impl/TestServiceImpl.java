@@ -1,7 +1,6 @@
 package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
-import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
-import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
+import com.kanyelings.telmah.mentormatchsb.api.dto.MatchDto;
 import com.kanyelings.telmah.mentormatchsb.config.Constants;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import com.kanyelings.telmah.mentormatchsb.business.service.TestService;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -33,29 +31,29 @@ public class TestServiceImpl implements TestService {
 
     static void setupEntities() {
         mentors = List.of(
-                MentorEntity.builder().firstName("Tanju").secondName("Bruno").department("COME").gender("M").build(),
-                MentorEntity.builder().firstName("Andrew").secondName("Tatah").department("COME").gender("M").build(),
-                MentorEntity.builder().firstName("Ngumih").secondName("Fienne").department("COME").gender("F").build(),
-                MentorEntity.builder().firstName("Joy").secondName("Ndalle").department("CVLE").gender("F").build(),
-                MentorEntity.builder().firstName("Ngwa").secondName("Jude").department("COME").gender("M").build(),
-                MentorEntity.builder().firstName("Alouzeh").secondName("Brandone").department("COME").gender("M").build(),
-                MentorEntity.builder().firstName("Ankini").secondName("Muso").department("COME").gender("F").build()
+                MentorEntity.builder().username("tanju").firstName("Tanju").secondName("Bruno").department("COME").gender("M").build(),
+                MentorEntity.builder().username("andy").firstName("Andrew").secondName("Tatah").department("COME").gender("M").build(),
+                MentorEntity.builder().username("ngumih").firstName("Ngumih").secondName("Fienne").department("COME").gender("F").build(),
+                MentorEntity.builder().username("joy").firstName("Joy").secondName("Ndalle").department("CVLE").gender("F").build(),
+                MentorEntity.builder().username("ngwa").firstName("Ngwa").secondName("Jude").department("COME").gender("M").build(),
+                MentorEntity.builder().username("alouz").firstName("Alouzeh").secondName("Brandone").department("COME").gender("M").build(),
+                MentorEntity.builder().username("ankini").firstName("Ankini").secondName("Muso").department("COME").gender("F").build()
         );
 
         mentees = List.of(
-                MenteeEntity.builder().firstName("Njong").secondName("Emy").department("COME").gender("F").build(),
-                MenteeEntity.builder().firstName("Chelsea").secondName("Banke").department("COME").gender("M").build(),
-                MenteeEntity.builder().firstName("Ntunyu").secondName("Serge").department("COME").gender("M").build(),
-                MenteeEntity.builder().firstName("Fombi").secondName("Favour").department("COME").gender("M").build(),
-                MenteeEntity.builder().firstName("Kelly").secondName("Mba").department("COME").gender("F").build(),
-                MenteeEntity.builder().firstName("Mofor").secondName("Emma").department("COME").gender("M").build(),
-                MenteeEntity.builder().firstName("Ngwa").secondName("Emma").department("COME").gender("M").build()
+                MenteeEntity.builder().username("njong").firstName("Njong").secondName("Emy").department("COME").gender("F").build(),
+                MenteeEntity.builder().username("chel").firstName("Chelsea").secondName("Banke").department("COME").gender("M").build(),
+                MenteeEntity.builder().username("serge").firstName("Ntunyu").secondName("Serge").department("COME").gender("M").build(),
+                MenteeEntity.builder().username("fombi").firstName("Fombi").secondName("Favour").department("COME").gender("M").build(),
+                MenteeEntity.builder().username("kelly").firstName("Kelly").secondName("Mba").department("COME").gender("F").build(),
+                MenteeEntity.builder().username("mofor").firstName("Mofor").secondName("Emma").department("COME").gender("M").build(),
+                MenteeEntity.builder().username("emma").firstName("Ngwa").secondName("Emma").department("COME").gender("M").build()
         );
 
     }
 
     @Override
-    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> shuffleTest() {
+    public ResponseEntity<List<MatchDto>> shuffleTest() {
         setupEntities();
 
         menteeRepository.deleteAll();
