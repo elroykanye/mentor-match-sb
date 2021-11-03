@@ -1,5 +1,6 @@
 package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
+import com.kanyelings.telmah.mentormatchsb.api.dto.MatchDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MenteeMapper;
@@ -45,24 +46,27 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> getAllMatches() {
+    public ResponseEntity<List<MatchDto>> getAllMatches() {
+        List<MatchDto> matchDtos = new ArrayList<>();
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
-            return new ResponseEntity<>(Map.of(), HttpStatus.OK);
+            return new ResponseEntity<>(List.of(), HttpStatus.OK);
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
             shuffleMatchesHelper();
 
-            return new ResponseEntity<>(
-                    mapMatchListToMentorMenteesMap(
-                            matchRepository.findAll()
-                                    .stream()
-                                    .map(MatchEntity::getMentorId)
-                                    .collect(Collectors.toList())
-                    )
-                    , HttpStatus.FOUND
+            mapMatchListToMentorMenteesMap(matchRepository.findAll()
+                    .stream()
+                    .map(MatchEntity::getMentorId)
+                    .collect(Collectors.toList())
+            ).forEach((mentorDto, menteeDtos) -> matchDtos.add(MatchDto.builder()
+                            .mentor(mentorDto)
+                            .mentees(menteeDtos)
+                            .build())
             );
+
+            return new ResponseEntity<>(matchDtos, HttpStatus.FOUND);
         }
     }
 
@@ -166,7 +170,7 @@ public class MatchServiceImpl implements MatchService {
         mentors.forEach(mentorEntity -> matches.put(mentorEntity, new ArrayList<>(0)));
 
         // add the default mentor in the matches hashmap
-        matches.put(defaultElroy, new ArrayList<>(0));
+        // matches.put(defaultElroy, new ArrayList<>(0));
 
         // create a sorted matches' hashmap in an atomic reference and assign the sortMatches() result to it
         AtomicReference<List<MatchComboV2>> sortedMatchCombos = new AtomicReference<>();
