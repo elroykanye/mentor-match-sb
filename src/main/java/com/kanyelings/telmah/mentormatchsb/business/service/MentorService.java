@@ -9,4 +9,6 @@ public interface MentorService {
     ResponseEntity<List<MentorDto>> getAllMentors();
 
     ResponseEntity<String> addNewMentor(MentorDto newMentor);
+
+    ResponseEntity<?> getMentorById(Long mentorId);
 }
