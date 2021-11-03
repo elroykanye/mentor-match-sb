@@ -64,20 +64,6 @@ public class TestServiceImpl implements TestService {
 
         matchService.shuffleMatches();
 
-        log.info("Retrieving all matches");
-        List<MatchEntity> matchEntities = matchRepository.findAll();
-
-        matchEntities.forEach(match -> {
-            Optional<MentorEntity> mentorOption = mentorRepository.findById(match.getMentorId());
-            MentorEntity mentor = mentorOption.orElse(Constants.DEFAULT_MENTOR_COME);
-
-            MenteeEntity mentee = menteeRepository.findById(match.getMenteeId()).orElseThrow();
-
-            System.out.println(mentor.getFirstName().concat(mentor.getSecondName())
-                    .concat( ":::::" )
-                    .concat(mentee.getFirstName().concat(mentee.getSecondName())));
-        });
-
         return matchService.getAllMatches();
     }
 }

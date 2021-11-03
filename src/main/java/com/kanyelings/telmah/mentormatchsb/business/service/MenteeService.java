@@ -10,4 +10,6 @@ public interface MenteeService {
     ResponseEntity<List<MenteeDto>> getAllMentees();
 
     ResponseEntity<String> addNewMentee(MenteeDto newMentee, MultipartFile imageFile);
+
+    ResponseEntity<?> getMenteeById(Long menteeId);
 }

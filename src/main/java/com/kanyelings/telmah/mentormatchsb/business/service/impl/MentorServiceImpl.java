@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,5 +48,18 @@ public class MentorServiceImpl implements MentorService {
         return saved ?
                 new ResponseEntity<>("Mentee added", HttpStatus.CREATED):
                 new ResponseEntity<>("Mentee not added", HttpStatus.CONFLICT);
+    }
+
+    @Override
+    public ResponseEntity<?> getMentorById(Long mentorId) {
+        AtomicReference<MentorDto> mentorDtoRef = new AtomicReference<>();
+        AtomicBoolean found = new AtomicBoolean(true);
+        mentorRepository.findById(mentorId).ifPresentOrElse(
+                mentorEntity -> mentorDtoRef.set(mentorMapper.mapMentorEntityToDto(mentorEntity)),
+                () -> found.set(false)
+        );
+        return found.get() ?
+                new ResponseEntity<>(mentorDtoRef, HttpStatus.FOUND):
+                new ResponseEntity<>("Mentor does not exist", HttpStatus.NOT_FOUND);
     }
 }

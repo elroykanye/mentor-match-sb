@@ -18,18 +18,20 @@ public class MentorController {
         this.mentorService = mentorService;
     }
 
+    @GetMapping("/{mentorId}")
+    public ResponseEntity<?> getMentorById(@PathVariable("mentorId") Long mentorId) {
+        return mentorService.getMentorById(mentorId);
+    }
 
-    @GetMapping(value = "/all")
+    @GetMapping
     public ResponseEntity<List<MentorDto>> getAllMentors(){
         return mentorService.getAllMentors();
     }
 
-    @PostMapping(
-            value = "/add",
-            consumes = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE
-            })
+    @PostMapping(consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
     public ResponseEntity<String> addMentor(@ModelAttribute MentorDto newMentor){
         return mentorService.addNewMentor(newMentor);
     }
