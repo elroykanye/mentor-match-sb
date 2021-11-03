@@ -20,9 +20,14 @@ public class MatchController {
         return matchService.shuffleMatches();
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<MatchDto>> getAll() {
         return matchService.getAllMatches();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteAll() {
+        return matchService.deleteAllMatches();
     }
 
     @GetMapping("/{mentorId}/mentees")

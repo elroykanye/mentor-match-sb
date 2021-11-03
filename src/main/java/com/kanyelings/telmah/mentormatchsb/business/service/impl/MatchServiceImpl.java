@@ -5,11 +5,9 @@ import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MenteeMapper;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MentorMapper;
-import com.kanyelings.telmah.mentormatchsb.business.model.MatchCombo;
 import com.kanyelings.telmah.mentormatchsb.business.model.MatchComboV2;
 import com.kanyelings.telmah.mentormatchsb.business.model.MatchSize;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
-import com.kanyelings.telmah.mentormatchsb.config.Constants;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MatchEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
@@ -36,13 +34,9 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public ResponseEntity<String> shuffleMatches() {
-        // response entity message
-        String message = "Shuffle successful";
-        HttpStatus status = HttpStatus.OK;
-
         shuffleMatchesHelper();
 
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>("Shuffle successful", HttpStatus.OK);
     }
 
     @Override
@@ -122,6 +116,12 @@ public class MatchServiceImpl implements MatchService {
                 );
     }
 
+    @Override
+    public ResponseEntity<String> deleteAllMatches() {
+        matchRepository.deleteAll();
+        return new ResponseEntity<>("Matches deleted", HttpStatus.OK);
+    }
+
     private MenteeEntity mapMenteeIdToMenteeEntity(Long menteeId) {
         return menteeRepository.findById(menteeId).orElseThrow();
     }
@@ -160,17 +160,12 @@ public class MatchServiceImpl implements MatchService {
     * @author Elroy Kanye
     */
     private Map<MentorEntity, List<MenteeEntity>> shuffleHelperV2(List<MentorEntity> mentors, List<MenteeEntity> mentees) {
-        // build the default mentor
-        MentorEntity defaultElroy = Constants.DEFAULT_MENTOR_COME;
 
         // create an empty hashmap for the matches
         Map<MentorEntity, List<MenteeEntity>> matches = new HashMap<>();
 
         // loop through the mentors list and place each mentor object as a key in the matches hashmap
         mentors.forEach(mentorEntity -> matches.put(mentorEntity, new ArrayList<>(0)));
-
-        // add the default mentor in the matches hashmap
-        // matches.put(defaultElroy, new ArrayList<>(0));
 
         // create a sorted matches' hashmap in an atomic reference and assign the sortMatches() result to it
         AtomicReference<List<MatchComboV2>> sortedMatchCombos = new AtomicReference<>();
