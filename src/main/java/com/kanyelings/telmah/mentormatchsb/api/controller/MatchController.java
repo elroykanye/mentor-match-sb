@@ -1,14 +1,13 @@
 package com.kanyelings.telmah.mentormatchsb.api.controller;
 
+import com.kanyelings.telmah.mentormatchsb.api.dto.MatchDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
-import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/match")
@@ -22,7 +21,7 @@ public class MatchController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> getAll() {
+    public ResponseEntity<List<MatchDto>> getAll() {
         return matchService.getAllMatches();
     }
 
