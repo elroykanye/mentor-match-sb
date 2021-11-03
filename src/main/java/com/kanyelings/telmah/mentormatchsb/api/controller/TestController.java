@@ -1,5 +1,6 @@
 package com.kanyelings.telmah.mentormatchsb.api.controller;
 
+import com.kanyelings.telmah.mentormatchsb.api.dto.MatchDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.service.TestService;
@@ -21,9 +22,9 @@ public class TestController {
     private final TestService testService;
 
     @GetMapping(value = "/shuffle")
-    public ResponseEntity<Map<MentorDto, List<MenteeDto>>> shuffleTest(@RequestParam String secret) {
+    public ResponseEntity<List<MatchDto>> shuffleTest(@RequestParam String secret) {
         if (!secret.equals("kanyelroy")) {
-            return new ResponseEntity<>(Map.of(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(List.of(), HttpStatus.FORBIDDEN);
         }
         return testService.shuffleTest();
     }
