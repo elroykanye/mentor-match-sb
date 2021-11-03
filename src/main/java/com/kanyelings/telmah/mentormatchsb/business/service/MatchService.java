@@ -14,4 +14,6 @@ public interface MatchService {
     ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId);
 
     ResponseEntity<?> getMentorByMenteeId(Long menteeId);
+
+    ResponseEntity<String> deleteAllMatches();
 }

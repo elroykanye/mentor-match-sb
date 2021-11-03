@@ -15,13 +15,17 @@ import java.util.List;
 public class MenteeController {
     private final MenteeService menteeService;
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/{menteeId}")
+    public ResponseEntity<?> getMenteeById(@PathVariable(value = "menteeId") Long menteeId) {
+        return menteeService.getMenteeById(menteeId);
+    }
+
+    @GetMapping
     public ResponseEntity<List<MenteeDto>> getAllMentees(){
         return menteeService.getAllMentees();
     }
 
     @PostMapping(
-            value = "/add",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE

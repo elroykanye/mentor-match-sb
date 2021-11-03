@@ -14,7 +14,7 @@ import java.util.List;
 public class SearchController {
     private final SearchService searchService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<EntitySearch>> searchEntities(@RequestParam("query") String query) {
         return searchService.searchEntities(query);
     }
