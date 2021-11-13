@@ -13,6 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
             "http://localhost:4200",
             "http://localhost:8000",
             "https://mentormatch-ng.vercel.app",
+            "https://mentormatch-ng-iota.vercel.app"
     };
 
     @Override
