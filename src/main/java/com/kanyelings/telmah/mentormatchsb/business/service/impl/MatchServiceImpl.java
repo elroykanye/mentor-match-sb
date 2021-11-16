@@ -48,8 +48,28 @@ public class MatchServiceImpl implements MatchService {
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
-            shuffleMatchesHelper();
+            if (shuffle) shuffleMatches();
 
+            matchRepository.findAll()
+                    .stream()
+                    .map(MatchEntity::getMentorId)
+                    .distinct()
+                    .forEach(mentorId -> {
+                        MentorDto mentorDto = mentorMapper.mapMentorEntityToDto(mentorRepository.getById(mentorId));
+
+                        MatchDto matchDto = MatchDto.builder()
+                                .mentor(mentorDto)
+                                .mentees(matchRepository.findAllByMentorId(mentorId)
+                                        .stream()
+                                        .map(MatchEntity::getMenteeId)
+                                        .map(menteeRepository::getById)
+                                        .map(menteeMapper::mapMenteeEntityToDto)
+                                        .collect(Collectors.toList()))
+                                .build();
+                        matchDtos.add(matchDto);
+                    });
+
+            /*
             mapMatchListToMentorMenteesMap(matchRepository.findAll()
                     .stream()
                     .map(MatchEntity::getMentorId)
