@@ -40,7 +40,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<MatchDto>> getAllMatches() {
+    public ResponseEntity<List<MatchDto>> getAllMatches(boolean shuffle) {
         List<MatchDto> matchDtos = new ArrayList<>();
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
@@ -79,6 +79,7 @@ public class MatchServiceImpl implements MatchService {
                             .mentees(menteeDtos)
                             .build())
             );
+             */
 
             return new ResponseEntity<>(matchDtos, HttpStatus.FOUND);
         }
