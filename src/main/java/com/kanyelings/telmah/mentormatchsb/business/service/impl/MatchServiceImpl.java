@@ -40,7 +40,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<MatchDto>> getAllMatches(boolean shuffle) {
+    public ResponseEntity<List<MatchDto>> getAllMatches(Boolean shuffle) {
         List<MatchDto> matchDtos = new ArrayList<>();
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
@@ -48,7 +48,7 @@ public class MatchServiceImpl implements MatchService {
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
-            if (shuffle) shuffleMatches();
+            if (shuffle != null && shuffle) shuffleMatches();
 
             matchRepository.findAll()
                     .stream()
@@ -85,6 +85,7 @@ public class MatchServiceImpl implements MatchService {
         }
     }
 
+    /*
     private Map<MentorDto, List<MenteeDto>> mapMatchListToMentorMenteesMap(List<Long> mentorIds) {
         Set<Long> uniqueMentorIds = new HashSet<>(mentorIds);
 
@@ -101,7 +102,7 @@ public class MatchServiceImpl implements MatchService {
 
         return matchesMap;
     }
-
+     */
 
     @Override
     public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId) {

@@ -9,7 +9,7 @@ import java.util.List;
 public interface MatchService {
     ResponseEntity<String> shuffleMatches();
 
-    ResponseEntity<List<MatchDto>> getAllMatches(boolean shuffle);
+    ResponseEntity<List<MatchDto>> getAllMatches(Boolean shuffle);
 
     ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId);
 

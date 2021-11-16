@@ -21,7 +21,7 @@ public class MatchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MatchDto>> getAll(@RequestParam(value = "shuffle") boolean shuffle) {
+    public ResponseEntity<List<MatchDto>> getAll(@RequestParam(value = "shuffle", required = false) Boolean shuffle) {
         return matchService.getAllMatches(shuffle);
     }
 
