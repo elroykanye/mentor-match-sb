@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @RestController
-@RequestMapping(value = "/api/mentee")
 @AllArgsConstructor
+@RequestMapping(value = "/api/mentee")
 public class MenteeController {
     private final MenteeService menteeService;
 

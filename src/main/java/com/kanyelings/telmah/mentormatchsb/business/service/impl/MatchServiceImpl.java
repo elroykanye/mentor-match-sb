@@ -40,7 +40,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public ResponseEntity<List<MatchDto>> getAllMatches() {
+    public ResponseEntity<List<MatchDto>> getAllMatches(Boolean shuffle) {
         List<MatchDto> matchDtos = new ArrayList<>();
         if (matchRepository.findAll().isEmpty()) {
             // case for if the match repository is empty
@@ -48,8 +48,28 @@ public class MatchServiceImpl implements MatchService {
         } else {
             // if not is the case that the match repository is empty,
             // shuffle the matches first
-            shuffleMatchesHelper();
+            if (shuffle != null && shuffle) shuffleMatches();
 
+            matchRepository.findAll()
+                    .stream()
+                    .map(MatchEntity::getMentorId)
+                    .distinct()
+                    .forEach(mentorId -> {
+                        MentorDto mentorDto = mentorMapper.mapMentorEntityToDto(mentorRepository.getById(mentorId));
+
+                        MatchDto matchDto = MatchDto.builder()
+                                .mentor(mentorDto)
+                                .mentees(matchRepository.findAllByMentorId(mentorId)
+                                        .stream()
+                                        .map(MatchEntity::getMenteeId)
+                                        .map(menteeRepository::getById)
+                                        .map(menteeMapper::mapMenteeEntityToDto)
+                                        .collect(Collectors.toList()))
+                                .build();
+                        matchDtos.add(matchDto);
+                    });
+
+            /*
             mapMatchListToMentorMenteesMap(matchRepository.findAll()
                     .stream()
                     .map(MatchEntity::getMentorId)
@@ -59,11 +79,13 @@ public class MatchServiceImpl implements MatchService {
                             .mentees(menteeDtos)
                             .build())
             );
+             */
 
             return new ResponseEntity<>(matchDtos, HttpStatus.FOUND);
         }
     }
 
+    /*
     private Map<MentorDto, List<MenteeDto>> mapMatchListToMentorMenteesMap(List<Long> mentorIds) {
         Set<Long> uniqueMentorIds = new HashSet<>(mentorIds);
 
@@ -80,7 +102,7 @@ public class MatchServiceImpl implements MatchService {
 
         return matchesMap;
     }
-
+     */
 
     @Override
     public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId) {

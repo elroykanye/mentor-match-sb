@@ -1,10 +1,8 @@
 package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 
 import com.kanyelings.telmah.mentormatchsb.api.dto.MatchDto;
-import com.kanyelings.telmah.mentormatchsb.config.Constants;
 import com.kanyelings.telmah.mentormatchsb.business.service.MatchService;
 import com.kanyelings.telmah.mentormatchsb.business.service.TestService;
-import com.kanyelings.telmah.mentormatchsb.data.entity.MatchEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
 import com.kanyelings.telmah.mentormatchsb.data.entity.MentorEntity;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MatchRepository;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -64,6 +61,6 @@ public class TestServiceImpl implements TestService {
 
         matchService.shuffleMatches();
 
-        return matchService.getAllMatches();
+        return matchService.getAllMatches(true);
     }
 }
