@@ -81,7 +81,7 @@ public class MatchServiceImpl implements MatchService {
             );
              */
 
-            return new ResponseEntity<>(matchDtos, HttpStatus.FOUND);
+            return new ResponseEntity<>(matchDtos, HttpStatus.OK);
         }
     }
 
