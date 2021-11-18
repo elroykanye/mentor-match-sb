@@ -58,7 +58,7 @@ public class MenteeServiceImpl implements MenteeService {
                 () -> found.set(false)
         );
         return found.get() ?
-                new ResponseEntity<>(menteeDtoRef, HttpStatus.FOUND):
+                new ResponseEntity<>(menteeDtoRef, HttpStatus.OK):
                 new ResponseEntity<>("Mentee does not exist", HttpStatus.NOT_FOUND);
     }
 }

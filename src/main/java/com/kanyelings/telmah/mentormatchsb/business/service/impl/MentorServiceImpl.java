@@ -59,7 +59,7 @@ public class MentorServiceImpl implements MentorService {
                 () -> found.set(false)
         );
         return found.get() ?
-                new ResponseEntity<>(mentorDtoRef, HttpStatus.FOUND):
+                new ResponseEntity<>(mentorDtoRef, HttpStatus.OK):
                 new ResponseEntity<>("Mentor does not exist", HttpStatus.NOT_FOUND);
     }
 }
