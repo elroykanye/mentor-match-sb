@@ -6,6 +6,7 @@ import com.kanyelings.telmah.mentormatchsb.business.service.SearchService;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SearchServiceImpl implements SearchService {
@@ -28,6 +29,7 @@ public class SearchServiceImpl implements SearchService {
         List<EntitySearch> searchResults = new ArrayList<>();
         menteeRepository.findAll()
                 .forEach(menteeEntity -> {
+                    log.info("searching mentees");
                     if (menteeEntity.getFirstName().contains(query) || menteeEntity.getSecondName().contains(query)) {
                         searchResults.add(EntitySearch.builder()
                                 .id(menteeEntity.getMenteeId())
@@ -57,6 +59,6 @@ public class SearchServiceImpl implements SearchService {
                     }
                 });
 
-        return new ResponseEntity<>(searchResults, HttpStatus.FOUND);
+        return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 }

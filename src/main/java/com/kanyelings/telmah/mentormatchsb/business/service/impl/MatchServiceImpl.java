@@ -69,40 +69,9 @@ public class MatchServiceImpl implements MatchService {
                         matchDtos.add(matchDto);
                     });
 
-            /*
-            mapMatchListToMentorMenteesMap(matchRepository.findAll()
-                    .stream()
-                    .map(MatchEntity::getMentorId)
-                    .collect(Collectors.toList())
-            ).forEach((mentorDto, menteeDtos) -> matchDtos.add(MatchDto.builder()
-                            .mentor(mentorDto)
-                            .mentees(menteeDtos)
-                            .build())
-            );
-             */
-
             return new ResponseEntity<>(matchDtos, HttpStatus.OK);
         }
     }
-
-    /*
-    private Map<MentorDto, List<MenteeDto>> mapMatchListToMentorMenteesMap(List<Long> mentorIds) {
-        Set<Long> uniqueMentorIds = new HashSet<>(mentorIds);
-
-        Map<MentorDto, List<MenteeDto>> matchesMap = new HashMap<>();
-        uniqueMentorIds.forEach(mentorId -> matchesMap.put(
-                mentorMapper.mapMentorEntityToDto(mentorRepository.getById(mentorId)),
-                matchRepository.findAllByMentorId(mentorId)
-                        .stream()
-                        .map(MatchEntity::getMenteeId)
-                        .map(menteeRepository::getById)
-                        .map(menteeMapper::mapMenteeEntityToDto)
-                        .collect(Collectors.toList())
-        ));
-
-        return matchesMap;
-    }
-     */
 
     @Override
     public ResponseEntity<List<MenteeDto>> getAllMenteesByMentorId(Long mentorId) {
