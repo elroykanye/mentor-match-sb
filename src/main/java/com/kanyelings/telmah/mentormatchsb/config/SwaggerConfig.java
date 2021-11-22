@@ -29,14 +29,7 @@ public class SwaggerConfig {
                 .title("Mentor Match API")
                 .version("1.0.0")
                 .description("API reactive docs for the mentor match services")
-                .contact(
-                        new Contact(
-                                "Elroy Kanye",
-                                "elroykanye.github.io/elroykanye",
-                                "elroykanye@gmail.com"
-                        )
-
-                )
+                .contact(new Contact("Elroy Kanye", "elroykanye.github.io/elroykanye", "elroykanye@gmail.com"))
                 .license("Apache License Version 2.0")
                 .build();
     }
