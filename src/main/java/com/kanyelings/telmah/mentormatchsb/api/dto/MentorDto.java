@@ -33,7 +33,4 @@ public class MentorDto {
 
     @JsonProperty(value = "gender")
     private String gender;
-
-    @JsonProperty(value = "image")
-    private MultipartFile image;
 }
