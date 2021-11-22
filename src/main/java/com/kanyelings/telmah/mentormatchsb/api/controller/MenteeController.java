@@ -26,6 +26,6 @@ public class MenteeController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> addMentee(@ModelAttribute MenteeDto newMentee){
-        return menteeService.addNewMentee(newMentee, newMentee.getImage());
+        return menteeService.addNewMentee(newMentee);
     }
 }

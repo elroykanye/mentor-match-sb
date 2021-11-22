@@ -33,7 +33,7 @@ public class MenteeServiceImpl implements MenteeService {
     }
 
     @Override
-    public ResponseEntity<String> addNewMentee(MenteeDto newMentee, MultipartFile imageFile) {
+    public ResponseEntity<String> addNewMentee(MenteeDto newMentee) {
         menteeRepository.save(menteeMapper.mapDtoToMentorEntity(newMentee));
         return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
     }
