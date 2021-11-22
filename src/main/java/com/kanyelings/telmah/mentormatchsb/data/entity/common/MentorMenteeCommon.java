@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
@@ -37,7 +38,4 @@ public abstract class MentorMenteeCommon implements Serializable {
 
     @Column(length = 8)
     private String gender;
-
-    @Column(length = 64)
-    private String imagePath;
 }
