@@ -9,7 +9,7 @@ import java.util.List;
 public interface MenteeService {
     ResponseEntity<List<MenteeDto>> getAllMentees();
 
-    ResponseEntity<String> addNewMentee(MenteeDto newMentee, MultipartFile imageFile);
+    ResponseEntity<String> addNewMentee(MenteeDto newMentee);
 
     ResponseEntity<?> getMenteeById(Long menteeId);
 }

@@ -36,7 +36,4 @@ public class MenteeDto {
 
     @JsonProperty (value = "previous_school")
     private String previousSchool;
-
-    @JsonProperty(value = "image")
-    private MultipartFile image;
 }

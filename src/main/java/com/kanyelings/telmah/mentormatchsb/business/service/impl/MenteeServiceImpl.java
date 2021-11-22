@@ -3,10 +3,9 @@ package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MenteeDto;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MenteeMapper;
 import com.kanyelings.telmah.mentormatchsb.business.service.MenteeService;
-import com.kanyelings.telmah.mentormatchsb.business.util.ImageUtil;
-import com.kanyelings.telmah.mentormatchsb.data.entity.MenteeEntity;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MenteeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,19 +33,9 @@ public class MenteeServiceImpl implements MenteeService {
     }
 
     @Override
-    public ResponseEntity<String> addNewMentee(MenteeDto newMentee, MultipartFile imageFile) {
-        boolean saved = false;
-        try {
-            String imagePath = ImageUtil.saveUserImage(newMentee.getImage(), newMentee.getUsername());
-            MenteeEntity menteeEntity = menteeMapper.mapDtoToMentorEntity(newMentee);
-            menteeEntity.setImagePath(imagePath);
-            menteeRepository.save(menteeEntity);
-            saved = true;
-        } catch (Exception ignored){
-        }
-        return saved ?
-                new ResponseEntity<>("Mentee added", HttpStatus.CREATED):
-                new ResponseEntity<>("Mentee not added", HttpStatus.CONFLICT);
+    public ResponseEntity<String> addNewMentee(MenteeDto newMentee) {
+        menteeRepository.save(menteeMapper.mapDtoToMentorEntity(newMentee));
+        return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
     }
 
     @Override
@@ -58,7 +47,7 @@ public class MenteeServiceImpl implements MenteeService {
                 () -> found.set(false)
         );
         return found.get() ?
-                new ResponseEntity<>(menteeDtoRef, HttpStatus.OK):
+                ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION).body(menteeDtoRef.get()):
                 new ResponseEntity<>("Mentee does not exist", HttpStatus.NOT_FOUND);
     }
 }

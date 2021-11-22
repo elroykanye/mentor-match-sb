@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @RestController
@@ -25,12 +24,8 @@ public class MenteeController {
         return menteeService.getAllMentees();
     }
 
-    @PostMapping(
-            consumes = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE
-            })
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> addMentee(@ModelAttribute MenteeDto newMentee){
-        return menteeService.addNewMentee(newMentee, newMentee.getImage());
+        return menteeService.addNewMentee(newMentee);
     }
 }

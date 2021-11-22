@@ -28,10 +28,7 @@ public class MentorController {
         return mentorService.getAllMentors();
     }
 
-    @PostMapping(consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE
-    })
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> addMentor(@ModelAttribute MentorDto newMentor){
         return mentorService.addNewMentor(newMentor);
     }
