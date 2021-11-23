@@ -34,8 +34,10 @@ public class MenteeServiceImpl implements MenteeService {
 
     @Override
     public ResponseEntity<String> addNewMentee(MenteeDto newMentee) {
-        menteeRepository.save(menteeMapper.mapDtoToMentorEntity(newMentee));
-        return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
+        if(!menteeRepository.findByUsernameOrEmail(newMentee.getUsername(), newMentee.getEmail()).isPresent()) {
+            menteeRepository.save(menteeMapper.mapDtoToMentorEntity(newMentee));
+            return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
+        } return new ResponseEntity<>("Already exists", HttpStatus.CONFLICT);
     }
 
     @Override

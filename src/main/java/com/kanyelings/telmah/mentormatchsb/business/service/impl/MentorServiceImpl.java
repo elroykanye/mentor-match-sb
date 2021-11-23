@@ -32,9 +32,10 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public ResponseEntity<String> addNewMentor(MentorDto newMentor) {
-        mentorRepository.save(mentorMapper.mapDtoToMentorEntity(newMentor));
-
-        return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
+        if (!mentorRepository.findByUsernameOrEmail(newMentor.getUsername(), newMentor.getEmail()).isPresent()) {
+            mentorRepository.save(mentorMapper.mapDtoToMentorEntity(newMentor));
+            return new ResponseEntity<>("Mentee added", HttpStatus.CREATED);
+        } return new ResponseEntity<>("Already exists", HttpStatus.CONFLICT);
     }
 
     @Override
