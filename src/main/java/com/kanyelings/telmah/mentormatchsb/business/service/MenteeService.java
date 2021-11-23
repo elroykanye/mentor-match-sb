@@ -12,4 +12,6 @@ public interface MenteeService {
     ResponseEntity<String> addNewMentee(MenteeDto newMentee);
 
     ResponseEntity<?> getMenteeById(Long menteeId);
+
+    ResponseEntity<String> deleteAllMentees(String secret);
 }
