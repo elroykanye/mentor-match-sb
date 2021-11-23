@@ -13,6 +13,9 @@ public class MenteeDto {
     @JsonProperty(value = "username")
     private String username;
 
+    @JsonProperty(value = "email")
+    private String email;
+
     @JsonProperty(value = "first_name")
     private String firstName;
 
@@ -36,4 +39,7 @@ public class MenteeDto {
 
     @JsonProperty (value = "previous_school")
     private String previousSchool;
+
+    @JsonProperty(value = "about")
+    private String about;
 }

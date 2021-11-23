@@ -18,6 +18,9 @@ public abstract class MentorMenteeCommon implements Serializable {
     @Column(length = 32, nullable = false, unique = true)
     private String username;
 
+    @Column(length = 64, unique = true)
+    private String email;
+
     @Column(length = 64)
     private String firstName;
 
@@ -38,4 +41,7 @@ public abstract class MentorMenteeCommon implements Serializable {
 
     @Column(length = 8)
     private String gender;
+
+    @Column(length = 512)
+    private String about;
 }

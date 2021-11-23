@@ -12,6 +12,9 @@ public class MentorDto {
     @JsonProperty(value = "username")
     private String username;
 
+    @JsonProperty(value = "email")
+    private String email;
+
     @JsonProperty(value = "first_name")
     private String firstName;
 
@@ -32,4 +35,7 @@ public class MentorDto {
 
     @JsonProperty(value = "gender")
     private String gender;
+
+    @JsonProperty(value = "about")
+    private String about;
 }
