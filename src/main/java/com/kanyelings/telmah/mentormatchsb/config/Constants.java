@@ -17,4 +17,6 @@ public class Constants {
     public static final List<MentorEntity> DEFAULT_MENTORS = List.of(
             DEFAULT_MENTOR_COME
     );
+
+    public static final String KANYE_SECRET_KEY = "kanyelroy";
 }
