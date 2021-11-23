@@ -3,6 +3,7 @@ package com.kanyelings.telmah.mentormatchsb.business.service.impl;
 import com.kanyelings.telmah.mentormatchsb.api.dto.MentorDto;
 import com.kanyelings.telmah.mentormatchsb.business.mapper.MentorMapper;
 import com.kanyelings.telmah.mentormatchsb.business.service.MentorService;
+import com.kanyelings.telmah.mentormatchsb.business.util.SecretUtil;
 import com.kanyelings.telmah.mentormatchsb.data.repository.MentorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,5 +48,14 @@ public class MentorServiceImpl implements MentorService {
         return found.get() ?
                 new ResponseEntity<>(mentorDtoRef, HttpStatus.OK):
                 new ResponseEntity<>("Mentor does not exist", HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAllMentors(String secret) {
+        if (SecretUtil.validSecret(secret)) {
+            mentorRepository.deleteAll();
+            return new ResponseEntity<>("Mentors deleted", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Mentors not deleted", HttpStatus.FORBIDDEN);
     }
 }

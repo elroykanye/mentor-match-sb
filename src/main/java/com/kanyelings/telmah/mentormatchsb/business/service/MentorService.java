@@ -11,4 +11,6 @@ public interface MentorService {
     ResponseEntity<String> addNewMentor(MentorDto newMentor);
 
     ResponseEntity<?> getMentorById(Long mentorId);
+
+    ResponseEntity<String> deleteAllMentors(String secret);
 }
